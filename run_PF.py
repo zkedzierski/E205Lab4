@@ -52,6 +52,9 @@ def main():
     x_ddot = moving_average(x_ddot)
     y_ddot = moving_average(y_ddot)
 
+    for t in range(len(time_stamps)):
+        yaw_lidar[t] = (-1*yaw_lidar[t] *  math.pi /180)
+
     lat_origin = lat_gps[0]
     lon_origin = lon_gps[0]
 
