@@ -13,7 +13,11 @@ def propogate_state(x_t_prev, u_t_noiseless):
     x_bar_t (np.array)   -- the predicted state
     """
     """STUDENT CODE START"""
-    x_bar_t = x_t_prev
+    x_bar_t = np.array([x_t_prev[0] + x_t_prev[2]*DT],
+                       [x_t_prev[1] + x_t_prev[3]*DT],
+                       [x_t_prev[2] + u_t_noiseless[0]*math.cos(wrap_to_pi(x_t_prev[4]))*DT],
+                       [x_t_prev[3] + u_t_noiseless[0]*math.sin(wrap_to_pi(x_t_prev[4]))*DT],
+                       [((x_t_prev[4]) + (u_t_noiseless[1]*DT))])
     """STUDENT CODE END"""
     return x_bar_t
 
@@ -32,7 +36,9 @@ def prediction_and_correction_step(x_t_prev, u_t, z_t):
 
     """STUDENT CODE START"""
     # Prediction step
-    x_bar_t = x_t_prev
+    x_bar_t = x_t_prev + np.random.rand(5).tranpose()
+
+    # Weighting
     """STUDENT CODE END"""
 
     return x_bar_t
