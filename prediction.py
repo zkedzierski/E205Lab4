@@ -13,12 +13,13 @@ def propogate_state(x_t_prev, u_t_noiseless):
     x_bar_t (np.array)   -- the predicted state
     """
     """STUDENT CODE START"""
-    x_bar_t = np.array([x_t_prev[0] + x_t_prev[2]*DT + np.random.normal(x_t_prev[0], .5)], # we just made up these standard deviations
-                       [x_t_prev[1] + x_t_prev[3]*DT + np.random.normal(x_t_prev[1], .5)],
-                       [x_t_prev[2] + (u_t_noiseless[0] + np.random.normal(u_t_noiseless[0], .5))*math.cos(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(x_t_prev[2], .1)],
-                       [x_t_prev[3] + (u_t_noiseless[0] + np.random.normal(u_t_noiseless[0], .5))*math.sin(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(x_t_prev[3], .1)],
-                       [((x_t_prev[4]) + (u_t_noiseless[1] + np.random.normal(u_t_noiseless[0], .1)*DT)) + np.random.normal(x_t_prev[4], math.pi/6)],
-                       [x_t_prev[5]])
+    x_bar_t = np.zeros([6,1])
+    x_bar_t[0] = x_t_prev[0] + x_t_prev[2]*DT + np.random.normal(x_t_prev[0], .5)
+    x_bar_t[1] = x_t_prev[1] + x_t_prev[3]*DT + np.random.normal(x_t_prev[1], .5)  
+    x_bar_t[2] = x_t_prev[2] + (u_t_noiseless[0] + np.random.normal(u_t_noiseless[0], .5))*math.cos(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(x_t_prev[2], .1)
+    x_bar_t[3] = x_t_prev[3] + (u_t_noiseless[0] + np.random.normal(u_t_noiseless[0], .5))*math.sin(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(x_t_prev[3], .1)
+    x_bar_t[4] = x_t_prev[4] + (u_t_noiseless[1] + np.random.normal(u_t_noiseless[0], .1)*DT) + np.random.normal(x_t_prev[4], math.pi/6)
+    x_bar_t[5] = x_t_prev[5]
     """STUDENT CODE END"""
     return x_bar_t
 
@@ -46,7 +47,7 @@ def prediction_and_correction_step(x_t_prev, u_t, z_t):
     sumW = 0
     for i in range(PARTICLES):
         x_bar_t = propogate_state(x_t_prev, u_t)
-        particles[i:,] = x_bar_t
+        particles[i,:] = x_bar_t
         particles[i, N-1] = calcPZX(x_bar_t, z_t)
         sumW += calcPZX(x_bar_t, z_t)
     
@@ -54,4 +55,4 @@ def prediction_and_correction_step(x_t_prev, u_t, z_t):
 
     """STUDENT CODE END"""
 
-    return particles, sumW
+    return particles
