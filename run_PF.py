@@ -60,6 +60,12 @@ def main():
 
     #  Initialize filter
     """STUDENT CODE START"""
+    particlesInit = np.zeros([PARTICLES, N])
+    for i in range(PARTICLES):
+        particlesInit[i,:] = [np.random.normal(0, .5), np.random.normal(0, .5), np.random.normal(0, .2), 
+                                np.random.normal(0, .5),np.random.normal(0, math.pi/6), 1/PARTICLES]
+
+    state_est_t_prev = [np.mean(particlesInit[:,0]), np.mean(particlesInit[:,1]), np.mean(particlesInit[:,2]), np.mean(particlesInit[:,3]), np.mean(particlesInit[:,0])]
     """STUDENT CODE END"""
 
     #  Run filter over data
