@@ -31,6 +31,5 @@ def resample_step(particles):
     """STUDENT CODE END"""
 
     return particles
-    """STUDENT CODE END"""
-
+    
   

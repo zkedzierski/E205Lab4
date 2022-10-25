@@ -14,10 +14,10 @@ def propogate_state(x_t_prev, u_t_noiseless):
     """
     """STUDENT CODE START"""
     x_bar_t = np.zeros([6,1])
-    x_bar_t[0] = x_t_prev[0] + x_t_prev[2]*DT + np.random.normal(0, .1)
-    x_bar_t[1] = x_t_prev[1] + x_t_prev[3]*DT + np.random.normal(0, .1)  
-    x_bar_t[2] = x_t_prev[2] + (u_t_noiseless[0] + np.random.normal(0, .1))*math.cos(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
-    x_bar_t[3] = x_t_prev[3] + (u_t_noiseless[0] + np.random.normal(0, .1))*math.sin(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
+    x_bar_t[0] = x_t_prev[0] + x_t_prev[2]*DT + np.random.normal(0, 1)
+    x_bar_t[1] = x_t_prev[1] + x_t_prev[3]*DT + np.random.normal(0, 1)  
+    x_bar_t[2] = x_t_prev[2] + (u_t_noiseless[0] + np.random.normal(0, 1))*math.cos(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
+    x_bar_t[3] = x_t_prev[3] + (u_t_noiseless[0] + np.random.normal(0, 1))*math.sin(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
     x_bar_t[4] = x_t_prev[4] + (u_t_noiseless[1] + np.random.normal(0,.05) )*DT + np.random.normal(0, math.pi/2) 
     x_bar_t[5] = x_t_prev[5]
     """STUDENT CODE END"""
