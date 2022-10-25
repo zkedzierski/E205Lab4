@@ -18,17 +18,17 @@ def propogate_state(x_t_prev, u_t_noiseless):
     x_bar_t[1] = x_t_prev[1] + x_t_prev[3]*DT + np.random.normal(0, .1)  
     x_bar_t[2] = x_t_prev[2] + (u_t_noiseless[0] + np.random.normal(0, .1))*math.cos(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
     x_bar_t[3] = x_t_prev[3] + (u_t_noiseless[0] + np.random.normal(0, .1))*math.sin(wrap_to_pi(x_t_prev[4]))*DT + np.random.normal(0, .1) 
-    x_bar_t[4] = x_t_prev[4] + (u_t_noiseless[1] + np.random.normal(0, .1))*DT + np.random.normal(0, .1) 
+    x_bar_t[4] = x_t_prev[4] + (u_t_noiseless[1] + np.random.normal(0,.05) )*DT + np.random.normal(0, math.pi/2) 
     x_bar_t[5] = x_t_prev[5]
     """STUDENT CODE END"""
     return x_bar_t
 
 
 def calcPZX(x_t, z_t): 
-    cov = math.sqrt(2*math.pi)*np.identity(3)
+    cov = math.sqrt(2*math.pi)*.4*np.identity(3)
     det = np.linalg.det((cov))
     x_t = np.array([x_t[0], x_t[1], x_t[4]])
-    pZX = (1/det) * math.exp(-.5 * (z_t - x_t).transpose() @ np.linalg.inv(np.identity(3)) @ (z_t - x_t))
+    pZX = (1/det) * math.exp(-.5 * (z_t - x_t).transpose() @ np.linalg.inv(.4*np.identity(3)) @ (z_t - x_t))
     return pZX
 
 def prediction_and_correction_step(x_t_prev, u_t, z_t):
