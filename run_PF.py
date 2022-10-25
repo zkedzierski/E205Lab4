@@ -69,8 +69,10 @@ def main():
 
     state_est_t_prev = [np.mean(particlesInit[:,0]), np.mean(particlesInit[:,1]), np.mean(particlesInit[:,2]), np.mean(particlesInit[:,3]), np.mean(particlesInit[:,4]), np.mean(particlesInit[:,5])]
 
-
-    particlesAllTime =  np.zeros([PARTICLES, N-1, len(time_stamps)])
+    state_estimates = np.empty((N, len(time_stamps)))
+    for i in range(N):
+        state_estimates[i, 0] = state_est_t_prev[i]
+    particlesAllTime =  np.zeros([PARTICLES, N, len(time_stamps)])
     gps_estimates = np.empty((2, len(time_stamps)))
 
     [gps_estimate_x, gps_estimate_y] = convert_gps_to_xy(lat_origin, lon_origin, lat_origin, lon_origin)
@@ -96,14 +98,18 @@ def main():
         resPart = resample_step(state_pred_t)
 
         #  For clarity sake/teaching purposes, we explicitly update t->(t-1)
-        state_est_t_prev = np.array([np.average(resPart[:,0:,:], weights = resPart[:,5:,:]),
-                                    np.average(resPart[:,1:,:], weights = resPart[:,5:,:]),
-                                    np.average(resPart[:,2:,:], weights = resPart[:,5:,:]),
-                                    np.average(resPart[:,3:,:], weights = resPart[:,5:,:]),
-                                    np.average(resPart[:,4:,:], weights = resPart[:,5:,:])])
+        state_est_t_prev = np.array([np.average(resPart[:,0], weights = resPart[:,5]),
+                                    np.average(resPart[:,1], weights = resPart[:,5]),
+                                    np.average(resPart[:,2], weights = resPart[:,5]),
+                                    np.average(resPart[:,3], weights = resPart[:,5]),
+                                    np.average(resPart[:,4], weights = resPart[:,5]),
+                                    1/N])
 
+        
         # Log Data
-        particlesAllTime[:, :, t] = state_est_t_prev
+
+        for i in range(N):
+            state_estimates[i,t] = state_est_t_prev[i]
 
       
         x_gps, y_gps = convert_gps_to_xy(lat_gps=lat_gps[t],
@@ -125,8 +131,11 @@ def main():
 
     """STUDENT CODE START"""
     # Plot here
-    plt.plot(gps_estimates[0],gps_estimates[1])
-    plt.plot(np.average(particlesAllTime[:,0:,:], weights = particlesAllTime[:,5:,:]), np.average(particlesAllTime[:,1:,:], weights = particlesAllTime[:,5:,:]))
+    x_real = [0, 5, 10, 10, 10, 10, 10, 5, 0, 0, 0, 0]
+    y_real = [0, 0, 0, 0, -5, -10, -10, -10, -10, -10, -5, 0]
+    plt.plot(x_real, y_real)
+    # plt.plot(gps_estimates[0],gps_estimates[1])
+    plt.plot(state_estimates[0,:], state_estimates[1,:])
     plt.xlabel("X Coord (m)")
     plt.ylabel("Y Coord (m)")
     plt.title("Real vs Estimated Path")
