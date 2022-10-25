@@ -24,9 +24,11 @@ def propogate_state(x_t_prev, u_t_noiseless):
     return x_bar_t
 
 
-def calcPZX(x_t, z_t):
-    cov = np.eye([5,5])
-    pZX = (1/np.linalg.det((math.sqrt(2*math.pi*cov)))) * math.exp(-.5 * (z_t - x_t).transpose() * np.linalg.inv(cov) * (z_t - x_t))
+def calcPZX(x_t, z_t): # square root of a matrix ??
+    cov = math.sqrt(2*math.pi)*np.identity(3)
+    det = np.linalg.det((cov))
+    x_t = np.array([x_t[0], x_t[1], x_t[5]])
+    pZX = det * math.exp(-.5 * (z_t - x_t).transpose() @ np.linalg.inv(cov) @ (z_t - x_t))
     return pZX
 
 def prediction_and_correction_step(x_t_prev, u_t, z_t):
@@ -47,7 +49,7 @@ def prediction_and_correction_step(x_t_prev, u_t, z_t):
     sumW = 0
     for i in range(PARTICLES):
         x_bar_t = propogate_state(x_t_prev, u_t)
-        particles[i,:] = x_bar_t
+        particles[i,:] = x_bar_t.transpose()
         particles[i, N-1] = calcPZX(x_bar_t, z_t)
         sumW += calcPZX(x_bar_t, z_t)
     
